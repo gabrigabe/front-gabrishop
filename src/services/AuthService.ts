@@ -32,5 +32,17 @@ class AuthService {
   getCurrentUser() {
     return JSON.parse(localStorage.getItem('user')|| '{}');;
   }
+
+
+  checkLogin() {
+
+    const currentUser = this.getCurrentUser()
+    if(!currentUser.access_token) return false
+    if(Date.now() < currentUser.exp) return false
+    return true
+
+
+}
+
 }
 export default new AuthService();
