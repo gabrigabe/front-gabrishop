@@ -11,6 +11,11 @@ class ProductsService {
 
         return response
     }
+    async addProducts(data: object){
+        const response = await axios.post(API_URL + "products", data);
+
+        return response
+    }
 }
 
 export default new ProductsService()

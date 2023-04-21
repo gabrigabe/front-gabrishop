@@ -4,6 +4,7 @@ import { DataGrid, GridColDef, GridRowsProp, GridValueGetterParams, GridRowSelec
 import NavBarApp from "../assets/navBar";
 import ProductsService from '../services/ProductsService';
 import { Margin } from '@mui/icons-material';
+import FormDialogAddProducts from '../assets/addProductDialog';
 
 export default function Products() {
 
@@ -75,9 +76,7 @@ export default function Products() {
         <Button variant="contained" size="large" fullWidth sx={{marginBottom: 2}}>
           Realizar Compra
         </Button>
-        <Button variant="contained" color="success" size="large" fullWidth onClick={AddProdu}>
-          Cadastrar produto
-        </Button>
+        <FormDialogAddProducts/>
         </Container>
         </>
 
