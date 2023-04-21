@@ -20,10 +20,6 @@ import { useForm } from "react-hook-form";
 
 
 export default function Register(){
-/*    const [name, setName] = useState<string>()
-    const [cpf, setCPF] = useState<string>()
-    const [email, setEmail] = useState<string>()
-    const [senha, setSenha] = useState<string>()*/
     const navigate = useNavigate()
 
     const {register, handleSubmit, formState: {errors}, getValues, setError} = useForm()
@@ -39,6 +35,7 @@ export default function Register(){
                 password: password
             }
              await AuthServices.register(data)
+             navigate('/login')
 
 
         }catch(err: any){
@@ -49,7 +46,6 @@ export default function Register(){
                     message:'Email ja cadastrado!'
                 })
             } else{
-                console.log('foi?')
                 setGeneralError(true)
 
             }

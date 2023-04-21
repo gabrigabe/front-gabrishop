@@ -33,6 +33,7 @@ export default function Login() {
       const data = {email, password: senha}
 
       await AuthService.login(data)
+      navigate('/products')
       }catch(err: any){
         if(err.message === 'Request failed with status code 401'){
         setError('email', {
@@ -70,7 +71,7 @@ export default function Login() {
                 Falha ao fazer login, tente novamente mais tarde!
                 </Alert>
              )}
-             
+
           <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
