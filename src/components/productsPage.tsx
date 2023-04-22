@@ -6,6 +6,8 @@ import ProductsService from '../services/ProductsService';
 import { Margin } from '@mui/icons-material';
 import FormDialogAddProducts from '../assets/addProductDialog';
 import AuthService from '../services/AuthService';
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default function Products() {
 
@@ -13,6 +15,7 @@ export default function Products() {
     const [rows, setRows] = React.useState<GridRowsProp>([])
     const [selection, setSelection] = React.useState<GridRowSelectionModel>([]);
     const authed = AuthService.getCurrentUser()
+    const navigate = useNavigate();
 
 
       
@@ -68,8 +71,20 @@ export default function Products() {
         await ProductsService.addSales({
             products: selectedProducts
         }, authed.access_token)
-    }catch(err){
-        console.log(err)
+        alert('Compra realizada com sucesso!')
+        window.location.reload()
+    }catch(err: AxiosError | any){
+        if(err.response.status === 401){
+            alert('Sessão expirada!')
+            AuthService.logout()
+            navigate('/')
+        }
+        if(err.response.status === 400 && err.response.data.message.includes('stock')){
+            setGeneralError({status: true, msg: 'Falha ao realizar compra: Um ou mais items sem estoque!'})
+        }
+        else{
+            setGeneralError({status: true, msg: 'Erro desconhecido ao realizar compra, tente novamente mais tarde!'})
+        }
     }
     }
     return(
