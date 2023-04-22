@@ -1,6 +1,6 @@
 import * as React from 'react'
 import NavBarApp from '../assets/navBar'
-import { Container, Grid, Typography } from '@mui/material'
+import { Alert, Container, Grid, Typography } from '@mui/material'
 import ProductsService from '../services/ProductsService'
 import AuthService from '../services/AuthService'
 import { useNavigate } from 'react-router-dom'
@@ -10,7 +10,8 @@ import ItemsGrid from '../assets/DataGrid'
 
 export default function ordersPage(){
 
-    const [sales, setSales] = React.useState<Array<any>>([{}])
+    const [sales, setSales] = React.useState<Array<any>>([])
+    const [generalError, setGeneralError] = React.useState<any>({status: false, msg: 'Erro Desconhecido'})
     const authed = AuthService.getCurrentUser()
     const navigate = useNavigate();
 
@@ -18,6 +19,7 @@ export default function ordersPage(){
     React.useEffect( () => {
         async function getData() {
             try{
+                console.log(sales)
                 const res = await ProductsService.getUserSales(authed.access_token)
 
                 setSales(res.data)      
@@ -28,6 +30,7 @@ export default function ordersPage(){
                     AuthService.logout()
                     navigate('/')
                 }
+                setGeneralError({status: true, msg:'Falha ao carregar o histórico de vendas!'})
 
             }
             
@@ -42,10 +45,17 @@ export default function ordersPage(){
         <>
         <NavBarApp/>
             <Container maxWidth="xl" sx={{border: 1,paddingTop: 5, paddingBottom: 5, backgroundColor:'#101010', borderColor:'#404040', marginTop: 10}}>
+            { generalError.status === true  && (
+                <Alert variant="filled" severity="error">
+                {generalError.msg}
+                </Alert>
+                 )}
+
                 <Typography component="h1" variant="h3" align='center'>
                   Meus pedidos
                  </Typography>
-                 { sales.length === 0 ? <h4>Parece que você não fez nenhum depósito ainda, que tal realizar o seu primeiro? =D</h4> :
+
+                 { sales.length === 0 && generalError.status === false ? <h4>Parece que você ainda não tem nenhum pedido realizado, que tal fazer um? :D</h4> :
                     sales.map((item: any) => (
                         <Grid sx={{ flexGrow: 1, border: 1, borderColor:'#404040', margin: 3, padding: 1, borderRadius: 1 }}>
                             <h1> Pedido id: {item._id}</h1>
