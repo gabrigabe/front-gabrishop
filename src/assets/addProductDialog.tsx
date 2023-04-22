@@ -13,24 +13,12 @@ import CurrencyExchangeIcon from '@mui/icons-material/CurrencyExchange';
 import { useForm } from 'react-hook-form';
 import { Margin } from '@mui/icons-material';
 import ProductsService from '../services/ProductsService';
+import { Alert } from '@mui/material';
 
-const currencies = [
-    {
-      value: 'USD',
-      label: '$ - USD',
-    },
-    {
-      value: 'EUR',
-      label: '€ - EUR',
-    },
-    {
-      value: 'BRL',
-      label: 'R$ - BRL',
-    },
-  ];
 
 export default function FormDialogAddProducts() {
   const [open, setOpen] = React.useState(false);
+  const [generalError, setGeneralError] = React.useState<any>({status: false, msg: 'Erro Desconhecido'})
   const { register, handleSubmit, formState: {errors}, setError } = useForm()
 
   const handleClickOpen = () => {
@@ -59,6 +47,12 @@ export default function FormDialogAddProducts() {
       return alert('Produto cadastrado com sucesso!')
 
     }catch(err: any){
+        if(err.request.response.includes('registered')){
+            setGeneralError({status: true, msg:'Produto ja cadastrado!'})
+        }
+        else{
+            setGeneralError({status: true, msg: err.msg})
+        }
         
     }
     
@@ -68,6 +62,11 @@ export default function FormDialogAddProducts() {
     <div>
         <Button variant="contained" color="success" size="large" fullWidth onClick={handleClickOpen}>Cadastrar Produto</Button>
       <Dialog open={open} onClose={handleClose} fullWidth>
+      { generalError.status === true  && (
+                <Alert variant="filled" severity="error">
+                {generalError.msg}
+                </Alert>
+             )}
         <DialogTitle>Cadastrar Produto</DialogTitle>
         <form onSubmit={handleSubmit(addProduct)}>
             <DialogContent>

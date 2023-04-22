@@ -5,12 +5,14 @@ import NavBarApp from "../assets/navBar";
 import ProductsService from '../services/ProductsService';
 import { Margin } from '@mui/icons-material';
 import FormDialogAddProducts from '../assets/addProductDialog';
+import AuthService from '../services/AuthService';
 
 export default function Products() {
 
     const [generalError, setGeneralError] = React.useState<any>({status: false, msg: 'Erro Desconhecido'})
     const [rows, setRows] = React.useState<GridRowsProp>([])
     const [selection, setSelection] = React.useState<GridRowSelectionModel>([]);
+    const authed = AuthService.getCurrentUser()
 
 
       
@@ -52,6 +54,24 @@ export default function Products() {
 
         getData()
     }, [])
+
+    async function handleSale(){
+        try{
+        const selectedProducts = selection
+        .map(select => rows.find(row => row.id === select))
+        .map((products: any) => {
+            return {
+                id: products.id , 
+                qtd:products.quantity2
+            }
+        })
+        await ProductsService.addSales({
+            products: selectedProducts
+        }, authed.access_token)
+    }catch(err){
+        console.log(err)
+    }
+    }
     return(
         <>
         <NavBarApp/>
@@ -73,7 +93,7 @@ export default function Products() {
           sx={{marginTop: 5, marginBottom: 5}}
           />
           
-        <Button variant="contained" size="large" fullWidth sx={{marginBottom: 2}}>
+        <Button variant="contained" size="large" fullWidth onClick={handleSale} sx={{marginBottom: 2}}>
           Realizar Compra
         </Button>
         <FormDialogAddProducts/>

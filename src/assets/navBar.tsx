@@ -12,6 +12,7 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import { History, ShoppingCart } from '@mui/icons-material';
 
 
 
@@ -51,6 +52,12 @@ export default function NavBarApp() {
         
         AuthServices.logout()
         navigate('/')
+    }
+    function handleProducts(){
+        navigate('/products')
+    }
+    function handleOrders(){
+        navigate('/orders')
     }
 
     
@@ -103,6 +110,18 @@ const handleCloseUserMenu = () => {
                     <LogoutIcon fontSize="small" />
                 </ListItemIcon>
                 Deslogar
+            </MenuItem>
+            <MenuItem onClick={handleProducts}>
+                <ShoppingCart>
+                    <LogoutIcon fontSize="small" />
+                </ShoppingCart>
+                 Produtos
+            </MenuItem>
+            <MenuItem onClick={handleOrders}>
+                <History>
+                    <LogoutIcon fontSize="small" />
+                </History>
+                 Meus Pedidos
             </MenuItem>
             </Menu>
           </Box>

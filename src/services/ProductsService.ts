@@ -16,6 +16,15 @@ class ProductsService {
 
         return response
     }
+    async addSales(data: object, token: string){
+        const response = (await axios.post(API_URL + "sales", data,{
+            headers:{
+                Authorization:`Bearer ${token}`
+            }
+        }))
+
+        return response
+    }
 }
 
 export default new ProductsService()
