@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Register from './components/register';
 import AuthService from './services/AuthService';
 import Products from './components/productsPage'
+import Orders from './components/ordersPage'
 
 
 
@@ -34,6 +35,11 @@ function App() {
         <Route path='/products' element={
           <RequireAuth redirectTo="/">
               <Products/>
+          </RequireAuth>}>
+        </Route>
+        <Route path='/orders' element={
+          <RequireAuth redirectTo="/">
+              <Orders/>
           </RequireAuth>}>
         </Route>
       </Routes>
