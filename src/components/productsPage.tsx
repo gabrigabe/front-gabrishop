@@ -13,6 +13,7 @@ export default function Products() {
 
     const [generalError, setGeneralError] = React.useState<any>({status: false, msg: 'Erro Desconhecido'})
     const [rows, setRows] = React.useState<GridRowsProp>([])
+    const [qtd, setQtd] = React.useState<number>(1)
     const [selection, setSelection] = React.useState<GridRowSelectionModel>([]);
     const authed = AuthService.getCurrentUser()
     const navigate = useNavigate();
@@ -68,6 +69,12 @@ export default function Products() {
                 qtd:products.quantity2
             }
         })
+        
+        if(selectedProducts.length === 0){
+            setGeneralError({status: true, msg: 'Selecione algum produto para realizar uma compra!'})
+            throw new Error()
+        }
+
         await ProductsService.addSales({
             products: selectedProducts
         }, authed.access_token)

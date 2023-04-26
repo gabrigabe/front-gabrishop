@@ -35,7 +35,7 @@ export default function Register(){
                 password: password
             }
              await AuthServices.register(data)
-             navigate('/login')
+             navigate('/')
 
 
         }catch(err: any){
